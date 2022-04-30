@@ -1,24 +1,41 @@
 import React, { memo } from 'react'
 import RefreshIcon from '../../../assets/images/refresh.svg'
 import { Card, Typography, Button, Select, MenuItem } from '../../../components'
-import COUNTRIES from '../../../commons/constants/countries'
+//import COUNTRIES from '../../../commons/constants/countries'
 import { CardPanelContentStyled, ItemStyled } from './style'
 
 const navigatorHasShare = navigator.share
 
-function Panel({ updateAt, onChange, data, country, getCoviddata }) {
-  const { cases, recovered, deaths, todayCases, todayDeaths } = data
+function Panel({ updateAt, onChange, countriesNames, data, country }) {
+  const { cases, recovered, deaths, todayCases, todayDeaths, deathsPerOneMillion, active } = data
+  //const COUNTRIES = Array.from(data).map((entry) => entry.country)
+
+  //const renderCountries = (country, index) => (
+  //  <MenuItem key={`country-${index}`} value={country.value}>
+  //    <ItemStyled>
+  //      <div>{country.label}</div>
+  //      <img src={country.flag} alt={`País-${country.label}`} />
+  //    </ItemStyled>
+  //  </MenuItem>
+  //)
 
   const renderCountries = (country, index) => (
-    <MenuItem key={`country-${index}`} value={country.value}>
+    <MenuItem key={`country-${index}`} value={country}>
       <ItemStyled>
-        <div>{country.label}</div>
-        <img src={country.flag} alt={`País-${country.label}`} />
+        <div>{country}</div>
       </ItemStyled>
     </MenuItem>
   )
 
-  const textCovid19 = `País: ${country} - recuperados: ${recovered}`
+  const textCovid19 = `País: ${country}
+                      - Total de casos: ${cases}
+                      - Óbitos hoje: ${todayDeaths} 
+                      - Casos hoje: ${todayCases}
+                      - Casos ativos: ${active}
+                      - Total de óbitos: ${deaths}
+                      - Total de recuperados: ${recovered}
+                      - Mortes por milhão: ${deathsPerOneMillion}`
+                      
 
   const copyInfo = () => {
     navigator.clipboard.writeText(textCovid19)
@@ -52,12 +69,13 @@ function Panel({ updateAt, onChange, data, country, getCoviddata }) {
     <Card>
       <CardPanelContentStyled>
         <div>
-          <Typography variant="h5" component="span" color="primary">COVID19</Typography>
-          <Typography variant="h6" component="span" color="primary">Painel Coronavírus</Typography>
-          <Typography variant="body2" component="span" color="primary">Atualizado em: {updateAt}</Typography>
+          <Typography variant="h5" component="span" color="primary">COVID19 </Typography>
+          <Typography variant="h6" component="span" color="primary"> Painel Coronavírus </Typography>
+          <br></br>
+          <Typography variant="body2" component="span" color="primary"> Atualizado em: {updateAt} </Typography>
           <div className="pt-2">
             <Select onChange={onChange} value={country}>
-              {COUNTRIES.map(renderCountries)}
+              {countriesNames.map(renderCountries)}
             </Select>
           </div>
         </div>

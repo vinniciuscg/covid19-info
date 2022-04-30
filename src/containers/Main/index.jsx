@@ -1,3 +1,4 @@
+import { getAllByAltText } from '@testing-library/react'
 import React, { memo, useState, useCallback, useEffect } from 'react'
 import Api from '../../api'
 import Board from './components/Board'
@@ -5,13 +6,22 @@ import Panel from './components/Panel'
 import { ContainerStyled } from './style'
 
 function Main() {
+  const [countriesNames, setCountriesNames] = useState([])
   const [data, setData] = useState({})
   const [country, setCountry] = useState('brazil')
   const updateAt = new Date().toLocaleString()
 
   const getCovidData = useCallback((country) => {
-    Api.getCountry(country)
+      Api.getCountry(country)
       .then(data => setData(data))
+  }, [])
+
+  useEffect(() => {    
+    Api.getCountriesNames()
+      .then(data => {
+        setCountriesNames(Array.from(data).map(entry => entry.country))
+      })
+    console.log('oi');
   }, [])
 
   useEffect(() => {    
@@ -28,12 +38,14 @@ function Main() {
       <div className="mb-2">
         <Panel
           data={data}
+          countriesNames={countriesNames}
           updateAt={updateAt}
           onChange={handleChange}
           country={country}
           getCovidData={getCovidData}
         />
       </div>
+
       <Board data={data} />
       
     </ContainerStyled>

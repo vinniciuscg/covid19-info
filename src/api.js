@@ -11,6 +11,12 @@ function getCountry(country) {
     .then((response) => response.json())
 }
 
+function getCountriesNames() {
+  return fetch(`${path}`, headers)
+    .then((response) => response.json())
+}
+
 export default {
-  getCountry
+  getCountry,
+  getCountriesNames
 }
