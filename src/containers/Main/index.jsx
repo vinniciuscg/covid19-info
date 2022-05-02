@@ -1,4 +1,3 @@
-import { getAllByAltText } from '@testing-library/react'
 import React, { memo, useState, useCallback, useEffect } from 'react'
 import Api from '../../api'
 import Board from './components/Board'
